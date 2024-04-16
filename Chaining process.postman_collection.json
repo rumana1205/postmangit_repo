@@ -1,0 +1,638 @@
+{
+	"info": {
+		"_postman_id": "eff3b42a-b76d-4158-b657-17c2c33f5b41",
+		"name": "Chaining process",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33402285"
+	},
+	"item": [
+		{
+			"name": "PostRequest",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"",
+							"var jsondata=JSON.parse(responseBody);",
+							"pm.environment.set(\"env_id\",jsondata.id);",
+							"console.log(jsondata.id);",
+							"",
+							"pm.test('Response status code is 201', function () {",
+							"    pm.expect(pm.response.code).to.equal(201);",
+							"})",
+							"",
+							"pm.test(\"status 201\", function(){",
+							"    pm.expect(pm.response.code).to.equal(201);",
+							"});",
+							"",
+							"pm.test(\"resonseTime\", function(){",
+							"    pm.expect(pm.response.responseTime).to.be.below(500)",
+							"});",
+							"",
+							"pm.test('Response has required fields', function () {",
+							"    var responseData = pm.response.json();",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.name).to.exist;",
+							"    pm.expect(responseData.gender).to.exist;",
+							"    pm.expect(responseData.email).to.exist;",
+							"    pm.expect(responseData.status).to.exist;",
+							"    pm.expect(responseData.id).to.exist;",
+							"    pm.expect(responseData.createdAt).to.exist;",
+							"})",
+							"",
+							"pm.test('Email is in a valid format', function () {",
+							"    const responseData = pm.response.json();",
+							"    pm.expect(responseData.email).to.exist;",
+							"    pm.expect(responseData.email).to.match(/^[\\w-]+(\\.[\\w-]+)*@([\\w-]+\\.)+[a-zA-Z]{2,7}$/);",
+							"})",
+							"",
+							"pm.test('Gender is either \\'male\\' or \\'female\\'', function () {",
+							"    const responseData = pm.response.json();",
+							"    pm.expect(responseData.gender).to.be.oneOf([",
+							"        'male',",
+							"        'female'",
+							"    ]);",
+							"})",
+							"",
+							"pm.test('Status is either \\'active\\' or \\'inactive\\'', function () {",
+							"    const responseData = pm.response.json();",
+							"    pm.expect(responseData.status).to.exist.and.to.be.oneOf([",
+							"        'active',",
+							"        'inactive'",
+							"    ], 'Status must be either \\'active\\' or \\'inactive\\'');",
+							"})",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"console.clear();\r",
+							"\r",
+							"var random=Math.random().toString(36).substr(2);\r",
+							"\r",
+							"var username=\"abc\"+random;\r",
+							"\r",
+							"var useremail=\"abc\"+random+\"@gmail.com\";\r",
+							"\r",
+							"pm.environment.set(\"NameEnvVar\",username);\r",
+							"pm.environment.set(\"EmailEnvVar\",useremail);\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"name\":\"{{NameEnvVar}}\", \r\n\"gender\":\"male\", \r\n\"email\":\"{{EmailEnvVar}}\", \r\n\"status\":\"active\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://reqres.in/api/users",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "postbasic",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var random=Math.random().toString(36).substr(2);\r",
+							"\r",
+							"var useremail=\"ryan\"+random+\"@gmail.com\";\r",
+							"\r",
+							"var username=\"ryan\"+random;\r",
+							"\r",
+							"pm.environment.set(\"email_env\",useremail);\r",
+							"pm.environment.set(\"name_env\",username);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData=JSON.parse(responseBody);\r",
+							"pm.environment.set(\"userid_env\",jsonData.id);\r",
+							"",
+							"pm.test(\"Response status code is 201\", function () {",
+							"  pm.expect(pm.response.code).to.equal(201);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has required fields\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.id).to.exist.and.to.be.a('number');",
+							"    pm.expect(responseData.name).to.exist.and.to.be.a('string');",
+							"    pm.expect(responseData.email).to.exist.and.to.be.a('string');",
+							"    pm.expect(responseData.gender).to.exist.and.to.be.a('string');",
+							"    pm.expect(responseData.status).to.exist.and.to.be.a('string');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Email is in a valid format\", function () {",
+							"  const responseData = pm.response.json();",
+							"  ",
+							"  pm.expect(responseData.email).to.exist;",
+							"  pm.expect(responseData.email).to.match(/^[\\w-]+(\\.[\\w-]+)*@([\\w-]+\\.)+[a-zA-Z]{2,7}$/);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Gender is either 'male' or 'female'\", function () {",
+							"  const responseData = pm.response.json();",
+							"  ",
+							"  pm.expect(responseData.gender).to.be.oneOf(['male', 'female']);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Status is either 'active' or 'inactive'\", function () {",
+							"  const responseData = pm.response.json();",
+							"  ",
+							"  pm.expect(responseData.status).to.exist.and.to.be.oneOf(['active', 'inactive'], \"Status must be either 'active' or 'inactive'\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"rumana\",\r\n    \"status\": \"active\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://reqres.in/api/users",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Practice",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var random=Math.random().toString(36).substr(2);\r",
+							"\r",
+							"var useremail=\"ryan\"+random+\"@gmail.com\";\r",
+							"\r",
+							"var username=\"ryan\"+random;\r",
+							"\r",
+							"pm.environment.set(\"email_env\",useremail);\r",
+							"pm.environment.set(\"name_env\",username);\r",
+							"\r",
+							"console.clear();"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var response = JSON.parse(responseBody);",
+							"",
+							"pm.environment.set('userid_env', response.id)",
+							"",
+							"pm.test('Response status code is 201', function () {",
+							"    pm.expect(pm.response.code).to.equal(201);",
+							"})",
+							"",
+							"pm.test(\"status 201\", function(){",
+							"    pm.expect(pm.response.code).to.equal(201);",
+							"});",
+							"",
+							"pm.test(\"resonseTime\", function(){",
+							"    pm.expect(pm.response.responseTime).to.be.below(500)",
+							"});",
+							"",
+							"pm.test('Response has required fields', function () {",
+							"    var responseData = pm.response.json();",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.name).to.exist;",
+							"    pm.expect(responseData.gender).to.exist;",
+							"    pm.expect(responseData.email).to.exist;",
+							"    pm.expect(responseData.status).to.exist;",
+							"    pm.expect(responseData.id).to.exist;",
+							"    pm.expect(responseData.createdAt).to.exist;",
+							"})",
+							"",
+							"pm.test('Email is in a valid format', function () {",
+							"    const responseData = pm.response.json();",
+							"    pm.expect(responseData.email).to.exist;",
+							"    pm.expect(responseData.email).to.match(/^[\\w-]+(\\.[\\w-]+)*@([\\w-]+\\.)+[a-zA-Z]{2,7}$/);",
+							"})",
+							"",
+							"pm.test('Gender is either \\'male\\' or \\'female\\'', function () {",
+							"    const responseData = pm.response.json();",
+							"    pm.expect(responseData.gender).to.be.oneOf([",
+							"        'male',",
+							"        'female'",
+							"    ]);",
+							"})",
+							"",
+							"pm.test('Status is either \\'active\\' or \\'inactive\\'', function () {",
+							"    const responseData = pm.response.json();",
+							"    pm.expect(responseData.status).to.exist.and.to.be.oneOf([",
+							"        'active',",
+							"        'inactive'",
+							"    ], 'Status must be either \\'active\\' or \\'inactive\\'');",
+							"})",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"name\":\"{{name_env}}\", \r\n\"gender\":\"male\", \r\n\"email\":\"{{email_env}}\", \r\n\"status\":\"active\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://reqres.in/api/users?id=1",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetRequest",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://reqres.in/api/users?id={{env_id}}",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "{{env_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateRequest",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"  pm.expect(pm.response.code).to.equal(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has the required fields\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.name).to.exist.and.to.be.a('string');",
+							"    pm.expect(responseData.gender).to.exist.and.to.be.a('string');",
+							"    pm.expect(responseData.status).to.exist.and.to.be.a('string');",
+							"    pm.expect(responseData.id).to.exist.and.to.be.a('number');",
+							"    pm.expect(responseData.email).to.exist.and.to.be.a('string');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Name is a non-empty string\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData.name).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Name should not be empty\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Gender is either male or female\", function () {",
+							"  const responseData = pm.response.json();",
+							"  ",
+							"  pm.expect(responseData.gender).to.satisfy((gender) => {",
+							"    return gender === \"male\" || gender === \"female\";",
+							"  }, \"Gender should be either male or female\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Status is either 'active' or 'inactive'\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData.status).to.exist.and.to.be.oneOf(['active', 'inactive']);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\r\n    \"name\": \"{{userid_env}}\",\r\n    //\"email\": \"{{email_env}}\",\r\n    \"gender\": \"male\",\r\n    \"status\": \"active\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://reqres.in/api/users?page=2",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteRequest",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"console.log();"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://reqres.in/api/users?page=2",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all resources",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://reqres.in/api/unknown",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"unknown"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getresponse",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"console.clear();"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"status 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"status either 200 or 201\", function(){\r",
+							"    pm.expect(pm.response.code).to.have.oneOf([200,201]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"contexnt type\",function(){\r",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json; charset=utf-8');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"validate json schema\",function(){\r",
+							"    pm.expect(tv4.validate(JsonData,schema)).to.be.true\r",
+							"});\r",
+							"\r",
+							"var JsonData=JSON.parse(responseBody);\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Weaver\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://reqres.in/api/users",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "cb9178a8421263215a872359257f32fa9b62f76f72b02e7785410ef9016f786a",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": "",
+			"type": "default"
+		}
+	]
+}
